@@ -1,0 +1,16 @@
+{
+    "name": "@lwd/gulp-pom-package-tasks",
+    "version": "0.1.0",
+    "description": "Tasks for keeping package.json in sync with POM file",
+    "license": "UNLICENSED",
+    "repository": {
+	"type": "git",
+	"url": "https://github.com/LollyWollyDoodle/gulp-pom-package-tasks.git"
+    },
+    "dependencies": {
+	"gulp": "~3.9",
+	"through2": "~2.0",
+	"vinyl": "~2.0",
+	"pom-parser": "~1.1"
+    }
+}
