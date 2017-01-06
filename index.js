@@ -1,7 +1,8 @@
-var gulp = require("gulp");
-var through2 = require("through2");
-var Vinyl = require("vinyl");
-var pomParser = require("pom-parser");
+const gulp = require("gulp");
+const through2 = require("through2");
+const Vinyl = require("vinyl");
+const pomParser = require("pom-parser");
+const fs = require("fs");
 
 module.exports = {
     updateVersion: function (cb) {
@@ -53,7 +54,6 @@ module.exports = {
     },
 
     checkVersion: function (cb) {
-	var fs = require("fs");
 	fs.readFile("package.json", { encoding: "UTF-8" }, function (err, data) {
 	    if (err) {
 		cb(err);
@@ -79,4 +79,27 @@ module.exports = {
 	    });
 	});
     },
+
+    checkDepPrerelease: function (cb) {
+	const semver = require("semver");
+	
+	fs.readFile("package.json", { encoding: "UTF-8" }, function (err, data) {
+	    if (err) {
+		cb(err);
+		return;
+	    }
+
+	    const packageJson = JSON.parse(data);
+
+	    for (var dep in packageJson.dependencies) {
+		let range = new semver.Range(packageJson.dependencies[dep]);
+		if (range.set[0][0].semver.prerelease.length > 0) {
+		    cb(new Error("Pre release version found for " + dep));
+		    return;
+		}
+	    }
+
+	    cb();
+	});
+    }
 };
